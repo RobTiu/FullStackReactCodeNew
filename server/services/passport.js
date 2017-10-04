@@ -24,24 +24,23 @@ passport.use(
             clientID: keys.googleClientID,
             clientSecret: keys.googleClientSecret,
             callbackURL: '/auth/google/callback',
-            proxy: true // trust the proxy to redirect the proper http protocol
-        },
-        (accessToken, refreshToken, profile, done) => {
+            proxy: true 
+             /*
+             trust the proxy to redirect the proper http protocol cuz heroku is using a load balancer to determine the proxy
+             by default google strategy does not trust proxy but in heroku, the proxy is in the heroku server itself so we are fine 
+             with setting it to true
+             */
+        },        
+        async (accessToken, refreshToken, profile, done) => {
             // check to see if the user exists in the user table. if it exists, then just return the user, otherwise create a new one
-            User.findOne({ googleId: profile.id }).then(existingUser => {
-                if (existingUser) {
-                    done(null, existingUser);
-                    // we already have a record with the given profile ID
-                }
-                else {
-                    // we don't have a user record wiht this ID, make a new record
-                    new User({ googleId: profile.id })
-                        .save()
-                        .then(user => done(null, user));
-
-                }
-            });
-
+            const existingUser = await User.findOne({ googleId: profile.id });
+            if (existingUser) {
+                return done(null, existingUser);               
+            }
+            
+            // we don't have a user record wiht this ID, make a new record
+            const user = await new User({ googleId: profile.id }).save();
+            done(null, user);            
         }
     )
 );
