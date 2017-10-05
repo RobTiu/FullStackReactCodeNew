@@ -6,12 +6,22 @@ module.exports = (app) => {
         scope: ['profile', 'email']
     }));
 
-    app.get('/auth/google/callback', passport.authenticate('google'));
+    app.get(
+        '/auth/google/callback', 
+        passport.authenticate('google'),
+        // function callback
+        (req, res) => {
+            res.redirect('/surveys');
+        }
+    );
 
-    app.get('/api/logout', (req, res) => {
-    	req.logout();
-    	res.send(req.user);
-    });
+    app.get(
+        '/api/logout', 
+        (req, res) => {
+        	req.logout();
+        	res.redirect('/');
+        }
+    );
 
     // after the user is authenticated.  send the user ID that is deserialized from index.js back as a response
     app.get('/api/current_user', (req, res) => {

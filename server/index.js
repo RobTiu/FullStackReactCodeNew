@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
 require('./services/passport');
@@ -14,6 +15,10 @@ const app = express();
 	app use calls are use to wire up middlewares (i.e. app.use).  
 	used to modify incoming requests from our app before they're sent off to ROUTE HANDLERS
 */
+
+// need the request body and parse it before sending it to the rest of the express application
+// because by default express does not parse 
+app.use(bodyParser.json());
 
 /* 
 	initialize cookies
@@ -33,7 +38,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// require imports the function from authRoutes and billingRoutes and call the function with the argument app
 require('./routes/authRoutes')(app);
+require('./routes/billingRoutes')(app);
 
 // process.env is an environment variable set up by heroku or whatever hosting site we decide to use
 const PORT = process.env.PORT || 5000;

@@ -18,3 +18,8 @@ ReactDOM.render(
 	<Provider store={store}><App /></Provider>, 
 	document.querySelector('#root')
 );
+
+// create-react-app module allows us access to environment variables that are defined in .env file.  we can access them
+// by using process.env which is the same as the server's way of accessing the host's (i.e. heroku) environment variable
+// console.log('STRIPE KEY:', process.env.REACT_APP_STRIPE_KEY);
+// console.log('Environment is ', process.env.NODE_ENV);
