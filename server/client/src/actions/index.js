@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { FETCH_USER } from './types';
+import { FETCH_USER, FETCH_SURVEYS } from './types';
+
+// WHEN CREATING NEW REDUX OPERATION, START WITH ACTIONS.  CREATE THE TYPE AND then export the action
+// THEN ADD CREATE A REDUCER AND ADD IT TO reducers/INDEX.JS.  
 
 // fetch user is a function 
 // () empty argument
@@ -26,4 +29,20 @@ export const handleToken = token => async dispatch => {
 	const res = await axios.post('/api/stripe', token);
 
 	dispatch({ type: FETCH_USER, payload: res.data });
+};
+
+export const submitSurvey = (values, history) => async dispatch => {
+	const res = await axios.post('/api/surveys', values);
+
+	// redirect to surveys home
+	history.push('/surveys');
+	dispatch({ type: FETCH_USER, payload: res.data });
+};
+
+export const fetchSurveys = () => async dispatch => {
+	const res = await axios.get('/api/surveys');
+
+
+	// res.data will contain ALL THE SURVEYS from surveysRoutes get(/api/surveys) call
+	dispatch({type: FETCH_SURVEYS, payload: res.data });
 };

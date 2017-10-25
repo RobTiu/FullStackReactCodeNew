@@ -41,7 +41,10 @@ class Header extends Component {
 		);
 	}
 }
+// '/auth/google/callback' returns to us an object with an auth property which we will then 
+// destructure auth from it by utilizing { auth } 
 
+//TODO: FIGURE OUT WHERE AUTH IS COMING FROM!!!
 function mapStateToProps({ auth }) {
 	return { auth };
 }

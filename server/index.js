@@ -42,6 +42,7 @@ app.use(passport.session());
 // require imports the function from authRoutes and billingRoutes and call the function with the argument app
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 
 // for production
 if (process.env.NODE_ENV === 'production') {
